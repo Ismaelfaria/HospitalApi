@@ -1,6 +1,14 @@
+using HospitalApi.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+var ConnectionString = builder.Configuration.GetConnectionString("HospitalConnection");
+
+builder.Services.AddDbContext<HospitalContext>(o => o.UseSqlServer(ConnectionString));
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

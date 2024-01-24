@@ -1,5 +1,5 @@
 ﻿using HospitalApi.Entity;
-using HospitalApi.Persistence;
+using HospitalApi.Persistence.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Win32;

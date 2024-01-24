@@ -4,6 +4,7 @@
     {
         public Patient()
         {
+            Condition = new Condition();
             IsDeleted = false;
         }
         public int Id { get; set; }
