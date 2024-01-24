@@ -1,3 +1,4 @@
+using HospitalApi.Mappers;
 using HospitalApi.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,10 @@ builder.Services.AddDbContext<HospitalContext>(o => o.UseSqlServer(ConnectionStr
 
 
 builder.Services.AddControllers();
+
+
+builder.Services.AddAutoMapper(typeof(HospitalProfile));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

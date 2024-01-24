@@ -1,4 +1,6 @@
-﻿using HospitalApi.Entity;
+﻿using AutoMapper;
+using HospitalApi.Entity;
+using HospitalApi.Models;
 using HospitalApi.Persistence.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +13,12 @@ namespace HospitalApi.Controllers
     public class HospitalController : ControllerBase
     {
         private readonly HospitalContext _context;
+        private readonly IMapper _mapper;
 
-        public HospitalController(HospitalContext context)
+        public HospitalController(HospitalContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -22,7 +26,9 @@ namespace HospitalApi.Controllers
         {
             var allRegistration = _context.Patients.Where(p => !p.IsDeleted).ToList();
 
-            return Ok(allRegistration);
+            var viewModel = _mapper.Map<List<HospitalViewModel>>(allRegistration);
+
+            return Ok(viewModel);
         }
 
         [HttpGet("{id}")]
@@ -35,20 +41,25 @@ namespace HospitalApi.Controllers
                 return NotFound();
             }
 
-            return Ok(register);
+            var viewModel = _mapper.Map<HospitalViewModel>(register);
+
+            return Ok(viewModel);
         }
 
         [HttpPost]
-        public IActionResult CreatingRegistry(Patient patient)
+        public IActionResult CreatingRegistry(HospitalInputModel patient)
         {
-            _context.Patients.Add(patient);
+
+            var createRegister = _mapper.Map<Patient>(patient);
+
+            _context.Patients.Add(createRegister);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetById), new { id = patient.Id }, patient);
+            return CreatedAtAction(nameof(GetById), new { id = createRegister.Id }, createRegister);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateRegistry(int id, Patient patient)
+        public IActionResult UpdateRegistry(int id, HospitalInputModel patient)
         {
             var register = _context.Patients.SingleOrDefault(p => p.Id == id);
 
