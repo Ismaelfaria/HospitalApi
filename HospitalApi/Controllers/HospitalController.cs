@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HospitalApi.Entity;
+using HospitalApi.Entity.Contracts;
 using HospitalApi.Models;
 using HospitalApi.Persistence.Context;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ namespace HospitalApi.Controllers
     [ApiController]
     public class HospitalController : ControllerBase
     {
+        
         private readonly HospitalContext _context;
         private readonly IMapper _mapper;
 
@@ -19,6 +21,8 @@ namespace HospitalApi.Controllers
         {
             _context = context;
             _mapper = mapper;
+  
+
         }
 
         [HttpGet]
@@ -53,6 +57,9 @@ namespace HospitalApi.Controllers
             var createRegister = _mapper.Map<Patient>(patient);
 
             _context.Patients.Add(createRegister);
+
+            createRegister.StartDate = DateTime.UtcNow;
+
             _context.SaveChanges();
 
             return CreatedAtAction(nameof(GetById), new { id = createRegister.Id }, createRegister);

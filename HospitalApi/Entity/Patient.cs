@@ -1,6 +1,8 @@
-﻿namespace HospitalApi.Entity
+﻿using HospitalApi.Entity.Contracts;
+
+namespace HospitalApi.Entity
 {
-    public class Patient
+    public class Patient : IPatient
     {
         public Patient()
         {
@@ -11,6 +13,7 @@
         public string Name { get; set; }
         public int Age { get; set; }
         public string Sexuality { get; set; }
+        public DateTime StartDate { get; set; }
         public bool IsDeleted { get; set; }
         public Condition Condition { get; set; }
 
