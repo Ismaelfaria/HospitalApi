@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using HospitalApi.Entity;
-using HospitalApi.Entity.Contracts;
 using HospitalApi.Models;
 using HospitalApi.Persistence.Context;
-using Microsoft.AspNetCore.Http;
+using HospitalApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Win32;
 
@@ -13,22 +12,19 @@ namespace HospitalApi.Controllers
     [ApiController]
     public class HospitalController : ControllerBase
     {
-        
-        private readonly HospitalContext _context;
+        private readonly IPatientService _patientService;
         private readonly IMapper _mapper;
 
-        public HospitalController(HospitalContext context, IMapper mapper)
+        public HospitalController(IPatientService patientService, IMapper mapper)
         {
-            _context = context;
+            _patientService = patientService;
             _mapper = mapper;
-  
-
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            var allRegistration = _context.Patients.Where(p => !p.IsDeleted).ToList();
+            var allRegistration = _patientService.GetAllPatients();
 
             var viewModel = _mapper.Map<List<HospitalViewModel>>(allRegistration);
 
@@ -38,65 +34,72 @@ namespace HospitalApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var register = _context.Patients.SingleOrDefault(p => p.Id == id);
-
-            if(register == null)
+            try
             {
-                return NotFound();
+
+                var register = _patientService.GetPatientById(id);
+
+                var viewModel = _mapper.Map<HospitalViewModel>(register);
+
+                return Ok(viewModel);
+
             }
-
-            var viewModel = _mapper.Map<HospitalViewModel>(register);
-
-            return Ok(viewModel);
+            catch (Exception)
+            {
+                return StatusCode(404);
+            }
         }
 
         [HttpPost]
         public IActionResult CreatingRegistry(HospitalInputModel patient)
         {
+            try
+            {
 
-            var createRegister = _mapper.Map<Patient>(patient);
+                var register = _patientService.CreatePatient(patient);
 
-            _context.Patients.Add(createRegister);
+                var viewModel = _mapper.Map<HospitalViewModel>(register);
 
-            createRegister.StartDate = DateTime.UtcNow;
+                return CreatedAtAction(nameof(GetById), new { id = viewModel.Id }, patient);
 
-            _context.SaveChanges();
-
-            return CreatedAtAction(nameof(GetById), new { id = createRegister.Id }, createRegister);
+            }
+            catch (Exception)
+            {
+                return StatusCode(400);
+            }
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateRegistry(int id, HospitalInputModel patient)
         {
-            var register = _context.Patients.SingleOrDefault(p => p.Id == id);
-
-            if (register == null)
+            try
             {
-                return NotFound();
+
+                _patientService.UpdatePatient(id, patient);
+
+                return NoContent();
+
             }
-
-            register.Update(patient.Name, patient.Age, patient.Sexuality);
-
-            _context.SaveChanges();
-
-            return NoContent();
+            catch (Exception)
+            {
+                return StatusCode(404);
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeletedRegistry(int id)
         {
-            var register = _context.Patients.SingleOrDefault(p => p.Id == id);
-
-            if (register == null)
+            try
             {
-                return NotFound();
+                _patientService.DeletePatient(id);
+
+                return NoContent();
+
             }
-
-            register.Delete();
-
-            _context.SaveChanges();
-
-            return NoContent();
+            catch (Exception)
+            {
+                return StatusCode(404);
+            }
         }
     }
 }

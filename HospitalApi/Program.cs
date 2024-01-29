@@ -1,7 +1,7 @@
-using HospitalApi.Entity;
-using HospitalApi.Entity.Contracts;
+
 using HospitalApi.Mappers;
 using HospitalApi.Persistence.Context;
+using HospitalApi.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,9 +22,7 @@ builder.Services.AddAutoMapper(typeof(HospitalProfile));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IPatient, Patient>();
-builder.Services.AddScoped<ICondition, Condition>();
-
+builder.Services.AddScoped<IPatientService, PatientService>();
 
 var app = builder.Build();
 

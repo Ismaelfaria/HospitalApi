@@ -30,8 +30,6 @@ namespace HospitalApi.Persistence.Context
             {
                 e.HasKey(p => p.IdCondition);
 
-                e.Property(p => p.ColorOfUrgency)
-                .IsRequired(false);
             });
         }
     }

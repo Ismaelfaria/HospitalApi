@@ -1,5 +1,4 @@
 ﻿using HospitalApi.Entity;
-using HospitalApi.Entity.Contracts;
 
 namespace HospitalApi.Models
 {

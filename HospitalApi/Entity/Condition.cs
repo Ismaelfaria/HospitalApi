@@ -1,8 +1,8 @@
-﻿using HospitalApi.Entity.Contracts;
+﻿
 
 namespace HospitalApi.Entity
 {
-    public class Condition : ICondition
+    public class Condition
     {
         public int IdCondition { get; set; }
         public string ColorOfUrgency { get; set; }

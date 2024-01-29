@@ -16,18 +16,20 @@ namespace HospitalApi.Services
             _context = context;
             _mapper = mapper;
         }
-        public void CreatePatient(HospitalInputModel patientInput)
+        public Patient CreatePatient(HospitalInputModel patientInput)
         {
             var createRegister = _mapper.Map<Patient>(patientInput);
             _context.Patients.Add(createRegister);
             createRegister.StartDate = DateTime.Now;
             _context.SaveChanges();
+
+            return createRegister;
         }
 
         public void DeletePatient(int id)
         {
             var register = _context.Patients.SingleOrDefault(d => d.Id == id);
-            
+
             register.Delete();
             _context.SaveChanges();
         }

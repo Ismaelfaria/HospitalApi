@@ -9,7 +9,9 @@ namespace HospitalApi.Mappers
         public HospitalProfile()
         {
             CreateMap<Patient, HospitalViewModel>();
+            CreateMap<HospitalViewModel, HospitalInputModel>();
             CreateMap<HospitalInputModel, Patient>();
+            CreateMap<Patient, HospitalInputModel>();
         }
     }
 }

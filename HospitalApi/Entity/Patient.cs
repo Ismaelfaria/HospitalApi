@@ -1,8 +1,8 @@
-﻿using HospitalApi.Entity.Contracts;
+﻿
 
 namespace HospitalApi.Entity
 {
-    public class Patient : IPatient
+    public class Patient
     {
         public Patient()
         {
