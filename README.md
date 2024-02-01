@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
- <a href="#-sobre-o-projeto" id="kk">Sobre</a> •
+ <a href="kk" id="kk">Sobre</a> •
  <a href="#-funcionalidades">Funcionalidades</a> •
  <a href="#-tecnologias">Tecnologias</a> • 
  <a href="#-autor">Autor</a>
