@@ -8,7 +8,7 @@
 
 <p align="center">
  <a href="kk" id="kk">Sobre</a> •
- <a href="#-funcionalidades">Funcionalidades</a> •
+ <a href="kk">Funcionalidades</a> •
  <a href="#-tecnologias">Tecnologias</a> • 
  <a href="#-autor">Autor</a>
 </p>
