@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using HospitalApi.Entity;
-using HospitalApi.Models;
+using HospitalApi.Mappers.Models;
 using HospitalApi.Persistence.Context;
 
 

@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using HospitalApi.Entity;
-using HospitalApi.Models;
-using HospitalApi.Persistence.Context;
+using HospitalApi.Mappers.Models;
 using HospitalApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Win32;

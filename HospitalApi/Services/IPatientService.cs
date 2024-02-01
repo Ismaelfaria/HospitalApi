@@ -1,5 +1,5 @@
 ﻿using HospitalApi.Entity;
-using HospitalApi.Models;
+using HospitalApi.Mappers.Models;
 
 namespace HospitalApi.Services
 {
