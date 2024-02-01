@@ -1,5 +1,5 @@
 <h4 align="center"> 
-	🚧 Hospital API 🚧
+	🏥 Hospital API 🏥
 </h4>
 
 <p align="center">
