@@ -1,5 +1,6 @@
 ﻿using HospitalApi.Entity;
 using HospitalApi.Mappers.Models;
+using HospitalApi.Validations;
 
 namespace HospitalApi.Services
 {
@@ -10,7 +11,5 @@ namespace HospitalApi.Services
         Patient CreatePatient(HospitalInputModel patientInput);
         void UpdatePatient(int id, HospitalInputModel patientInput);
         void DeletePatient(int id);
-
-        
     }
 }

@@ -22,11 +22,18 @@ namespace HospitalApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var allRegistration = _patientService.GetAllPatients();
+            try
+            {
 
-            var viewModel = _mapper.Map<List<HospitalViewModel>>(allRegistration);
+                var allRegistration = _patientService.GetAllPatients();
 
-            return Ok(viewModel);
+                return Ok(allRegistration);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(404, $"Erro do GetAll(Controller): {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
@@ -34,7 +41,6 @@ namespace HospitalApi.Controllers
         {
             try
             {
-
                 var register = _patientService.GetPatientById(id);
 
                 var viewModel = _mapper.Map<HospitalViewModel>(register);
@@ -42,9 +48,9 @@ namespace HospitalApi.Controllers
                 return Ok(viewModel);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(404);
+                return StatusCode(404, $"Erro do GetById(Controller): {ex.Message}");
             }
         }
 
@@ -53,17 +59,14 @@ namespace HospitalApi.Controllers
         {
             try
             {
-
                 var register = _patientService.CreatePatient(patient);
 
-                var viewModel = _mapper.Map<HospitalViewModel>(register);
-
-                return CreatedAtAction(nameof(GetById), new { id = viewModel.Id }, patient);
+                return CreatedAtAction(nameof(GetById), new { id = register.Id }, patient);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(400);
+                return StatusCode(400, $"Erro do Post(Controller): {ex.Message}");
             }
         }
 
@@ -72,15 +75,14 @@ namespace HospitalApi.Controllers
         {
             try
             {
-
                 _patientService.UpdatePatient(id, patient);
 
                 return NoContent();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(404);
+                return StatusCode(404, $"Erro do Put(Controller): {ex.Message}");
             }
         }
 
@@ -94,9 +96,9 @@ namespace HospitalApi.Controllers
                 return NoContent();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(404);
+                return StatusCode(400, $"Erro do Delete(Controller): {ex.Message}");
             }
         }
     }

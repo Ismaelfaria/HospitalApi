@@ -1,7 +1,9 @@
 
 using HospitalApi.Mappers;
 using HospitalApi.Persistence.Context;
+using HospitalApi.Repository;
 using HospitalApi.Services;
+using HospitalApi.Validations;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +25,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IValidationEntity, ValidationEntity>();
 
 var app = builder.Build();
 

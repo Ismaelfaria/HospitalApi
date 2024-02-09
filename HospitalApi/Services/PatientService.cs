@@ -2,54 +2,95 @@
 using HospitalApi.Entity;
 using HospitalApi.Mappers.Models;
 using HospitalApi.Persistence.Context;
+using HospitalApi.Repository;
+using HospitalApi.Validations;
 
 
 namespace HospitalApi.Services
 {
     public class PatientService : IPatientService
     {
-        private readonly HospitalContext _context;
+        private readonly IPatientRepository _patientRepository;
         private readonly IMapper _mapper;
+        private readonly IValidationEntity _validate;
 
-        public PatientService(HospitalContext context, IMapper mapper)
+        public PatientService(IPatientRepository patientRepository, IMapper mapper, IValidationEntity validate)
         {
-            _context = context;
+            _patientRepository = patientRepository;
             _mapper = mapper;
+            _validate = validate;
         }
         public Patient CreatePatient(HospitalInputModel patientInput)
         {
-            var createRegister = _mapper.Map<Patient>(patientInput);
-            _context.Patients.Add(createRegister);
-            createRegister.StartDate = DateTime.Now;
-            _context.SaveChanges();
+            try
+            {
+                _validate.ValidatePatient(patientInput);
 
-            return createRegister;
+                var createRegister = _mapper.Map<Patient>(patientInput);
+
+                createRegister.StartDate = DateTime.Now;
+                _patientRepository.Save(createRegister);
+                return createRegister;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao criar o paciente.(Service)", ex);
+            }
+
         }
 
         public void DeletePatient(int id)
         {
-            var register = _context.Patients.SingleOrDefault(d => d.Id == id);
+            try
+            {
+                _patientRepository.Delete(id);
 
-            register.Delete();
-            _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao deletar o paciente.(Service)", ex);
+            }
         }
 
         public IEnumerable<Patient> GetAllPatients()
         {
-            return _context.Patients.Where(de => !de.IsDeleted).ToList();
+            try
+            {
+                return _patientRepository.FindAll();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao visualizar todos os paciente.(Service)", ex);
+            }
+
         }
 
         public Patient GetPatientById(int id)
         {
-            return _context.Patients.SingleOrDefault(de => de.Id == id);
+            try
+            {
+
+                return _patientRepository.FindById(id);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao visualizar o paciente.(Service)", ex);
+            }
         }
 
         public void UpdatePatient(int id, HospitalInputModel patientInput)
         {
-            var register = _context.Patients.SingleOrDefault(d => d.Id == id);
+            try
+            {
+                var createRegister = _mapper.Map<Patient>(patientInput);
 
-            register.Update(patientInput.Name, patientInput.Age, patientInput.Sexuality);
-            _context.SaveChanges();
+                _patientRepository.Update(id, createRegister);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao atualizar os paciente.(Service)", ex);
+            }
         }
     }
 }
