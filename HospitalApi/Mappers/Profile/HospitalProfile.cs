@@ -12,6 +12,8 @@ namespace HospitalApi.Mappers
             CreateMap<HospitalViewModel, HospitalInputModel>();
             CreateMap<HospitalInputModel, Patient>();
             CreateMap<Patient, HospitalInputModel>();
+            CreateMap<Condition, CondicaoInputModel>();
+            CreateMap<CondicaoInputModel, Condition>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using HospitalApi.Mappers.Models;
 using HospitalApi.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -55,23 +56,26 @@ namespace HospitalApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreatingRegistry(HospitalInputModel patient)
+        public IActionResult CreatingRegistry([FromForm] HospitalInputModel patient)
         {
             try
             {
                 var register = _patientService.CreatePatient(patient);
 
-                return CreatedAtAction(nameof(GetById), new { id = register.Id }, patient);
-
+                return CreatedAtAction(nameof(GetById), new { id = register.Id }, register);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new { errors = ex.Errors.Select(e => e.ErrorMessage) });
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Erro do Post(Controller): {ex.Message}");
+                return StatusCode(500, $"Erro do Post(Controller): {ex.Message}");
             }
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateRegistry(int id, HospitalInputModel patient)
+        public IActionResult UpdateRegistry([FromForm] int id, HospitalInputModel patient)
         {
             try
             {

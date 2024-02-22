@@ -6,5 +6,6 @@ namespace HospitalApi.Mappers.Models
     {
         public int Id { get; set; }
         public DateTime StartDate { get; set; }
+        public Condition Condition { get; set; }
     }
 }

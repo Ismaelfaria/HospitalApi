@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using HospitalApi.Entity;
 using HospitalApi.Mappers.Models;
-using HospitalApi.Persistence.Context;
 using HospitalApi.Repository;
-using HospitalApi.Validations;
-
 
 namespace HospitalApi.Services
 {
@@ -12,30 +10,29 @@ namespace HospitalApi.Services
     {
         private readonly IPatientRepository _patientRepository;
         private readonly IMapper _mapper;
-        private readonly IValidationEntity _validate;
+        private readonly IValidator<HospitalInputModel> _validator;
 
-        public PatientService(IPatientRepository patientRepository, IMapper mapper, IValidationEntity validate)
+        public PatientService(IPatientRepository patientRepository, IMapper mapper, IValidator<HospitalInputModel> validator)
         {
             _patientRepository = patientRepository;
             _mapper = mapper;
-            _validate = validate;
+            _validator = validator;
         }
         public Patient CreatePatient(HospitalInputModel patientInput)
         {
-            try
-            {
-                _validate.ValidatePatient(patientInput);
+            var validationResult = _validator.Validate(patientInput);
 
-                var createRegister = _mapper.Map<Patient>(patientInput);
-
-                createRegister.StartDate = DateTime.Now;
-                _patientRepository.Save(createRegister);
-                return createRegister;
-            }
-            catch (Exception ex)
+            if (!validationResult.IsValid)
             {
-                throw new Exception("Ocorreu um erro ao criar o paciente.(Service)", ex);
+                throw new ValidationException("Erro de validação ao criar o paciente", validationResult.Errors);
             }
+            var createCondition = _mapper.Map<Condition>(patientInput.Condition);
+            var createRegister = _mapper.Map<Patient>(patientInput);
+
+            createRegister.Condition = createCondition;
+            createRegister.StartDate = DateTime.Now;
+            _patientRepository.Save(createRegister);
+            return createRegister;
 
         }
 

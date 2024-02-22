@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HospitalApi.Entity;
 using HospitalApi.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace HospitalApi.Repository
 {
@@ -14,12 +15,17 @@ namespace HospitalApi.Repository
         }
         public IEnumerable<Patient> FindAll()
         {
-            return _context.Patients.Where(de => !de.IsDeleted).ToList();
+            return _context.Patients
+                .Where(de => !de.IsDeleted)
+                .Include(de => de.Condition)
+                .ToList();        
         }
 
         public Patient FindById(int id)
         {
-            return _context.Patients.SingleOrDefault(de => de.Id == id);
+            return _context.Patients
+                .Include(de => de.Condition)
+                .SingleOrDefault(de => de.Id == id);
         }
         public Patient Save(Patient patient)
         {

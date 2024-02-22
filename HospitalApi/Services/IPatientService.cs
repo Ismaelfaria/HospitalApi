@@ -1,6 +1,5 @@
 ﻿using HospitalApi.Entity;
 using HospitalApi.Mappers.Models;
-using HospitalApi.Validations;
 
 namespace HospitalApi.Services
 {

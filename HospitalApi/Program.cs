@@ -1,9 +1,11 @@
 
+using FluentValidation;
 using HospitalApi.Mappers;
+using HospitalApi.Mappers.Models;
+using HospitalApi.Mappers.Validator;
 using HospitalApi.Persistence.Context;
 using HospitalApi.Repository;
 using HospitalApi.Services;
-using HospitalApi.Validations;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +28,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-builder.Services.AddScoped<IValidationEntity, ValidationEntity>();
+
+builder.Services.AddTransient<IValidator<HospitalInputModel>, ModelInputValidator>();
 
 var app = builder.Build();
 
