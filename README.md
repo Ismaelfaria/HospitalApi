@@ -3,7 +3,7 @@
 </h4>
 
 <p align="center">
-	<img alt="Status Em Desenvolvimento" src="https://img.shields.io/badge/STATUS-EM%20DESENVOLVIMENTO-green">
+	<img alt="Status Concluído" src="https://img.shields.io/badge/STATUS-CONCLU%C3%8DDO-brightgreen">
 </p>
 
 <p align="center">
